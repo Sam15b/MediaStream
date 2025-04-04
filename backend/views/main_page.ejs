@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="MediaStream is a powerful streaming platform that enables seamless real-time communication.">
+      <title>MediaStream || Join Room</title>
+
+      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+      <link rel="manifest" href="/site.webmanifest">
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <style>
+            * {
+                  margin: 0;
+                  padding: 0;
+                  box-sizing: border-box;
+                  text-decoration: none;
+                  outline: none;
+                  border: none;
+            }
+
+            .heading {
+                  text-align: center;
+            }
+
+            .heading h2 {
+                  font-size: 2rem;
+                  color: burlywood;
+            }
+
+            .heading h2 span {
+                  color: lightgreen;
+            }
+
+            .joinroomdiv {
+                  width: 70%;
+                  margin: 2% auto;
+                  border-radius: 10px;
+                  background-color: #f5f5f5;
+                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .joinroomheading {
+                  background-color: #025AA5;
+                  padding: 6px;
+                  border-radius: 10px 10px 0 0;
+            }
+
+            .joinroomheading h2 {
+                  color: #fff;
+                  text-align: center;
+                  margin-bottom: 20px;
+            }
+
+            .form {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+            }
+
+            .form form {
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  gap: 10px;
+                  margin: 3% auto;
+                  width: 80%;
+            }
+
+            .form label {
+                  font-weight: bold;
+            }
+
+            .form input {
+                  padding: 10px;
+                  border: 1px solid #ccc;
+                  border-radius: 5px;
+                  font-size: 16px;
+
+            }
+
+            .btn {
+                  margin: 2% auto;
+                  margin-bottom: -1%;
+                  padding: 10px;
+                  background-color: #025AA5;
+                  color: white;
+                  font-size: 16px;
+                  font-weight: bold;
+                  border: none;
+                  border-radius: 5px;
+                  cursor: pointer;
+                  transition: background-color 0.3s ease;
+                  width: 100%;
+                  text-align: center;
+            }
+
+            .btn:hover {
+                  background-color: #013f7d;
+            }
+
+            .createroomdiv {
+                  width: 70%;
+                  margin: 2% auto;
+                  border-radius: 10px;
+                  background-color: #f5f5f5;
+                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .createroomheading {
+                  background-color: #025AA5;
+                  padding: 6px;
+                  border-radius: 10px 10px 0 0;
+            }
+
+            .createroomheading h2 {
+                  color: #fff;
+                  text-align: center;
+                  margin-bottom: 20px;
+            }
+
+            .footer {
+                  text-align: center;
+                  background: #025AA5;
+            }
+
+            .footer .TT {
+                  font-size: 1.3rem;
+                  text-decoration: none;
+            }
+
+            .footer .credit {
+                  color: #fff;
+                  font-weight: normal;
+                  font-size: 1.3rem;
+            }
+      </style>
+</head>
+
+<body>
+      <div class="heading">
+            <h2>Media <span>Streaming</span></h2>
+      </div>
+
+      <div class="joinroomdiv">
+            <div class="joinroomheading">
+                  <h2>Join Room</h2>
+            </div>
+            <div class="form">
+                  <form id="joinroom">
+                        <label for="name">Name:</label>
+                        <input type="text" placeholder="Enter your Name" id="jname">
+                        <p id="J_name" style="display: none;color: red;"></p>
+                        <label for="roomid">Room ID:</label>
+                        <input type="text" placeholder="Enter Room Id" id="roomid">
+                        <p id="J_Id" style="display: none;color: red;"></p>
+                        <button type="submit" class="btn">Submit</button>
+                  </form>
+            </div>
+      </div>
+
+      <div class="createroomdiv" id="createroom_div">
+            <div class="createroomheading">
+                  <h2>Create Room</h2>
+            </div>
+
+            <div class="form">
+                  <form id="createroom">
+                        <label for="name">Name:</label>
+                        <input type="text" placeholder="Enter your Name" id="cname" required>
+                        <p id="CR_name" style="display: none;color: red;"></p>
+                        <button type="submit" class="btn">Submit</button>
+                  </form>
+            </div>
+      </div>
+
+      <section class="footer">
+            <br><br>
+            <div>
+                  <a href="/Terms&Conditions" class="TT" style="color: white;font-weight: bold;">Terms &amp;
+                        Conditions</a>&nbsp;
+                  &nbsp; &nbsp; &nbsp; &nbsp;
+                  <a href="/PrivacyPolicy" class="TT" style="color: white; font-weight: bold;">Privacy
+                        Policy</a>
+            </div><br><br><br>
+
+            <div style="width: 100%;background: #013f7d66;padding: 10px;">
+                  <h1 class="credit">©2025 <span>Media Stream | all rights reserved!</h1>
+            </div>
+      </section>
+</body>
+
+<script>
+
+
+      async function generateKey() {
+            return await crypto.subtle.generateKey(
+                  { name: "AES-GCM", length: 256 },
+                  true,
+                  ["encrypt", "decrypt"]
+            );
+      }
+
+
+      function arrayBufferToBase64(buffer) {
+            return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+      }
+
+
+      async function encryptData(key, data) {
+            const iv = crypto.getRandomValues(new Uint8Array(12)); 
+            const encrypted = await crypto.subtle.encrypt(
+                  { name: "AES-GCM", iv },
+                  key,
+                  new TextEncoder().encode(data)
+            );
+            return { encrypted: arrayBufferToBase64(encrypted), iv: arrayBufferToBase64(iv) };
+      }
+
+      function getQueryParam(param) {
+            return new URLSearchParams(window.location.search).get(param);
+      }
+
+      let RoomId = getQueryParam("RID")
+
+      if (RoomId) {
+            console.log("true")
+            document.getElementById("roomid").value = RoomId
+            document.getElementById("roomid").readOnly = true
+            document.getElementById("createroom_div").style.display = 'none'
+      }
+
+      $('#joinroom').submit(async function (e) {
+            e.preventDefault();
+            var form = this;
+
+            const name = document.getElementById("jname").value
+            const id = document.getElementById("roomid").value
+
+            if (!name || !id) {
+                  if (!name) {
+                        document.getElementById("J_name").innerText = 'Please Enter your Name.'
+                        document.getElementById("J_name").style.display = 'block'
+                  }
+                  if (!id) {
+                        document.getElementById("J_Id").innerText = 'Please Enter your Valid Room Id.'
+                        document.getElementById("J_Id").style.display = 'block'
+                  }
+                  return;
+            }
+            console.log(name, id)
+
+
+
+            try {
+
+                  if (localStorage.getItem("aesKey")) {
+                        console.log("Previous key found. Removing...");
+                        localStorage.removeItem("aesKey");
+                  }
+
+                  const key = await generateKey();
+                  const rawKey = await crypto.subtle.exportKey("raw", key);
+                  localStorage.setItem("aesKey", arrayBufferToBase64(rawKey));
+
+                  const encryptedName = await encryptData(key, name);
+                  const encryptedId = await encryptData(key, id);
+
+
+                  window.location.href = `/sfu?name=${encodeURIComponent(encryptedName.encrypted)}&id=${encodeURIComponent(encryptedId.encrypted)}&Nameiv=${encodeURIComponent(encryptedName.iv)}&Idiv=${encodeURIComponent(encryptedId.iv)}`;
+
+            } catch (error) {
+                  console.error("Encryption/Decryption error:", error);
+            }
+      })
+
+      $('#createroom').submit(async function (e) {
+            e.preventDefault();
+            var form = this;
+            const name = document.getElementById("cname").value
+            if (!name) {
+                  document.getElementById("CR_name").innerText = 'Please Enter your Name.'
+                  document.getElementById("CR_name").style.display = 'block'
+            }
+            //var id = '';
+            console.log(name)
+            function generateId() {
+                  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                  let id = '';
+                  for (let i = 0; i < 5; i++) {
+                        const randomIndex = Math.floor(Math.random() * characters.length);
+                        id += characters[randomIndex];
+                  }
+                  return id;
+            }
+
+
+            const id = generateId()
+            console.log(id)
+            try {
+
+                  if (localStorage.getItem("aesKey")) {
+                        console.log("Previous key found. Removing...");
+                        localStorage.removeItem("aesKey");
+                  }
+
+                  const key = await generateKey();
+                  const rawKey = await crypto.subtle.exportKey("raw", key);
+                  localStorage.setItem("aesKey", arrayBufferToBase64(rawKey));
+
+                  const encryptedName = await encryptData(key, name);
+                  const encryptedId = await encryptData(key, id);
+
+                  window.location.href = `/sfu?name=${encodeURIComponent(encryptedName.encrypted)}&id=${encodeURIComponent(encryptedId.encrypted)}&Nameiv=${encodeURIComponent(encryptedName.iv)}&Idiv=${encodeURIComponent(encryptedId.iv)}`;
+
+            } catch (error) {
+                  console.error("Encryption/Decryption error:", error);
+            }
+      })
+</script>
+
+</html>

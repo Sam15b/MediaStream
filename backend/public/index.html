@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MediaStream is a powerful streaming platform that enables seamless real-time communication.">
+    <title>MediaStream || Confrencing Media</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <style>
+        .carousel-indicators [data-bs-target] {
+            box-sizing: content-box;
+            flex: 0 0 auto;
+            width: 10px;
+            height: 0px;
+            padding: 0;
+            margin-right: 3px;
+            margin-left: 3px;
+            text-indent: -999px;
+            cursor: pointer;
+            background-color: #000;
+            border-radius: 15px;
+            border-top: 10px solid #fff;
+            border-bottom: 3px solid #fff;
+            opacity: .5;
+            transition: opacity .6s ease;
+        }
+
+        .carousel-indicators .active {
+            opacity: 1;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 8px 16px;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+        }
+
+        .share-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .user-details {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stop-presenting {
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .stop-presenting:hover {
+            background-color: #357abd;
+        }
+
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            background-color: #333;
+        }
+
+        .center-container .video-card {
+            background-color: #333;
+
+        }
+
+        .center-container .video-card video {
+
+            margin: 0 auto;
+            display: flex
+        }
+
+        .video-stream {
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .user-name {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 2;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .control-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 10px;
+            background-color: #444;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .control-btn i {
+            font-size: 20px;
+            color: white;
+        }
+
+        body:hover .control-bar {
+            display: flex;
+        }
+
+        .mic-btn,
+        .video-btn,
+        .end-call-btn {
+            background-color: #ff4c4c;
+        }
+
+        .share-btn {
+            background-color: #888;
+        }
+
+        .end-call-btn {
+            background-color: #d32f2f;
+            width: 80px;
+            border-radius: 40px;
+        }
+
+        .end-call-btn i {
+            transform: rotate(135deg);
+        }
+
+        .end-call-btn:hover {
+            background-color: #f44336;
+        }
+
+        .bagger {
+            background: #888;
+            position: inherit;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding-top: 1.8%;
+            padding-bottom: 0.3%;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .bagger span {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+
+            i {
+                -moz-animation-duration: 500ms;
+                -moz-animation-name: blink;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-direction: alternate;
+
+                -webkit-animation-duration: 500ms;
+                -webkit-animation-name: blink;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-direction: alternate;
+
+                animation-duration: 500ms;
+                animation-name: blink;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+                color: yellow;
+                float: left;
+                padding-top: 4px;
+                padding-right: 0px;
+                text-align: center;
+                margin-right: -1.5%;
+            }
+
+
+        }
+
+        .pop_up_button {
+            cursor: pointer;
+        }
+
+        .pop_up_button:hover {
+            opacity: 0.5;
+        }
+
+        @-moz-keyframes blink {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @-webkit-keyframes blink {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+
+        #share-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .popup-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .close-btn:hover {
+            color: black;
+            font-weight: 600;
+        }
+
+        .share-icons {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            gap: 25px;
+        }
+
+        .icon {
+            text-decoration: none;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+
+        }
+
+        .whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .facebook {
+            background: #1877f2;
+            color: white;
+        }
+
+        .twitter {
+            background: #000;
+            color: white;
+        }
+
+        .email {
+            background: #808080;
+            color: white;
+        }
+
+        .linkedin {
+            background: #0077B5;
+            color: white;
+        }
+
+        .align {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        #share-link {
+            width: calc(100% - 70px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.85rem;
+        }
+
+        #copy-btn {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .icon:hover {
+            opacity: 0.8;
+        }
+
+    </style>
+    <style id="dynamic-styles">
+        .card1 .grid-container {
+            display: flex;
+            padding: 20px;
+            background-color: #2c2c2c;
+            height: 90vh;
+            box-sizing: border-box;
+        }
+
+        .card1 .grid-container .video-card1 {
+            position: relative;
+            background-color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+            height: 50vh;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body style="background-color: #2c2c2c;overflow: hidden;">
+
+    <div id="share-popup" class="popup">
+        <div class="popup-content">
+            <div>
+                <span id="close-popup" class="close-btn">&times;</span>
+            </div>
+
+            <div class="share-icons">
+                <a target="_blank" class="icon whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a target="_blank" class="icon facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a target="_blank" class="icon twitter">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a target="_blank" class="icon email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a target="_blank" class="icon linkedin">
+                    <!-- <i class="fab fa-discord"></i> -->
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+            </div>
+            <div class="align">
+                <input type="text" id="share-link" value="" readonly>
+                <button id="copy-btn">Copy</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="carouselExampleDark" class="carousel carousel-dark slide">
+        <div class="bagger">
+            <span>
+                <i class="fa fa-circle fa-fw"></i> &nbsp; Share your room, connect instantly with friends! Click<span
+                    id="pop_up_button" class="pop_up_button">🔗</span>
+            </span>
+        </div>
+        <div class="carousel-indicators">
+
+            <button id="pointscroller" type="button" data-bs-target="#carouselExampleDark" class="active"
+                data-bs-slide-to="0" aria-current="true" aria-label="Slide 1"></button>
+        </div>
+        <div class="carousel-inner">
+
+            <div class="carousel-item card1 active" data-bs-interval="10000">
+                <div id="video-container1" class="grid-container">
+
+                </div>
+            </div>
+        </div>
+        <button id="Btnleft" style="display: none;" class="carousel-control-prev" type="button"
+            data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button id="Btnright" style="display: none;" class="carousel-control-next" type="button"
+            data-bs-target="#carouselExampleDark" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+        <div class="control-bar">
+            <div id="mic_btn" class="control-btn mic-btn">
+                <i class="fas fa-microphone-slash"></i>
+            </div>
+            <div id="video_btn" class="control-btn video-btn">
+                <i class="fas fa-video-slash"></i>
+            </div>
+            <div id="share_screen" class="control-btn share-btn">
+                <i class="fas fa-share"></i>
+            </div>
+            <div id="call_ended" class="control-btn end-call-btn">
+                <i class="fas fa-phone"></i>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <script src="bundle.js"></script>
+    </footer>
+</body>
+
+</html>

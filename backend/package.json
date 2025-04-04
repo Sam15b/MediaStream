@@ -1,0 +1,36 @@
+{
+  "name": "mediasoup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "watch": "NODE_OPTIONS='--experimental-vm-modules' watchify public/index.js -t [ babelify --global --presets [ @babel/preset-env ] ] -o public/bundle.js -v"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "httpolyglot": "^0.1.2",
+    "mediasoup": "^3.15.1",
+    "mediasoup-client": "^3.7.17",
+    "serve-favicon": "^2.5.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "watchify": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/plugin-transform-runtime": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/runtime": "^7.27.0",
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.1",
+    "nodemon": "^3.1.7"
+  }
+}

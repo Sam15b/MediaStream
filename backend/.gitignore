@@ -1,0 +1,22 @@
+# SSL/TLS Certificates & Keys (DO NOT COMMIT THESE!)
+ssl/
+*.pem
+*.key
+*.crt
+*.cert
+
+# Node.js / Mediasoup
+node_modules/
+.env
+npm-debug.log
+yarn-error.log
+
+# IDE & OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Mediasoup build files
+build/
+dist/
