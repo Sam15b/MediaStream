@@ -44,7 +44,7 @@ The system is divided into three major components:
 
 Click the image below to watch a full demo of MediaStream in action:
 
-<a data-start="223" data-end="337" rel="noopener" target="_new" class="" href="https://www.linkedin.com/posts/sam-sde_opencv-androiddevelopment-flask-activity-7318148279110701056-KyDZ?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEztkXcB7v8aQJ1eKeIOBmmBCzZ9XxNr4jk"><img alt="Watch the Demo" data-start="224" data-end="289" src="https://drive.google.com/file/d/1LPXoIVpbXUVRUV5JH-P4mQjmGc7tOrNd/view" style="max-width:100%;width:110vh;"></a>
+<a data-start="223" data-end="337" rel="noopener" target="_new" class="" href=""><img alt="Watch the Demo" data-start="224" data-end="289" src="https://drive.google.com/file/d/1LPXoIVpbXUVRUV5JH-P4mQjmGc7tOrNd/view" style="max-width:100%;width:110vh;"></a>
 
 ---
 
