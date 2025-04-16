@@ -30,8 +30,7 @@ class MediasoupService {
 
   void connectToServer(String room, String username) {
     print('Hello try to connect with :${username},${room}');
-    // socket = IO.io('ws://43.204.127.251:3000/mediasoup', <String, dynamic>{ 
-    socket = IO.io('ws://43.210.8.45:3000/mediasoup', <String, dynamic>{
+    socket = IO.io('wss://43.210.8.45:3000/mediasoup', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -295,22 +294,7 @@ class MediasoupService {
       producerTransport.on('connect', (Map data) {
         print("Transport connect event triggered");
 
-        var callback = data['callback'];
-        var errback = data['errback'];
 
-        try {
-
-          socket.emit('transport-connect', {
-            'transportId': producerTransport.id,
-            'dtlsParameters': data['dtlsParameters'].toMap(),
-          });
-          print("checking the transport callback");
-
-          callback();
-        } catch (error) {
-          print("Error during transport connect: $error");
-          errback(error);
-        }
       });
 
       producerTransport.on('produce', (Map data) {
@@ -452,121 +436,6 @@ class MediasoupService {
    
   }
 
-  void _consumerCallback(Consumer consumer, accept, socketId) async {
-    if (socketId == socketid) {
-      return;
-    } else {
-      print("Consumer created: ${consumer.id}");
-
-      MediaStreamTrack track = consumer.track;
-      print("checking track in callback consumer ${track}");
-      print("Received track in callback consumer: ${track.id}");
-
-      var paramater = accept({});
-      print("checkwhat is comming in accept callback ${paramater}");
-      print(
-          "Also checking here the Parameter of Source ${paramater['Source']}");
-
-      consumerTransports.add({
-        'consumerTransport': paramater['consumerTransport'],
-        'serverConsumerTransportId': paramater['serverConsumerTransportId'],
-        'producerId': paramater['remoteProducerId'],
-        'consumer': consumer
-      });
-      print(
-          "Check the paramaters kind ====== ${paramater['kind']} And Source ${paramater['Source']}");
-      if (paramater['kind'] == 'audio') {
-        final Map<String, dynamic> checkuser = users.firstWhere(
-          (user) => user['socketId'] == socketId,
-          orElse: () =>
-              {'error': 'User not found'},
-        );
-        if (checkuser.containsKey('error')) {
-          print("User with socketId $socketId not found for audio");
-        } else {
-          MediaStream AudioStream = await createLocalMediaStream('AudioStream');
-          await AudioStream.addTrack(track);
-
-          checkuser['AudioRenderer'].srcObject = AudioStream;
-          Refresh('Audio updated');
-
-        }
-      }
-      if (paramater['kind'] == 'video') {
-        if (paramater['Source'] == 'camera') {
-          final Map<String, dynamic> VideoUser = users.firstWhere(
-            (user) => user['socketId'] == socketId,
-            orElse: () => {'error': 'User not found'},
-          );
-          if (VideoUser.containsKey('error')) {
-            print(
-                "User with socketId $socketId not found for Video RENDERING.");
-          } else {
-            MediaStream remoteStream =
-                await createLocalMediaStream('remoteStream');
-            print("Created local media stream.In callback consumer");
-
-            await remoteStream.addTrack(track);
-            RTCVideoRenderer renderer = VideoUser['videoRenderer'];
-            try {
-              await renderer.initialize();
-              print("Renderer initialized for video stream.");
-
-              renderer.srcObject = remoteStream;
-              Refresh('Video Rendering updated');
-            } catch (e) {
-              print("Error initializing renderer: $e");
-            }
-          }
-        }
-        if (paramater['Source'] == 'screen') {
-          print(
-              "✅ Consumer received for screen sharing with track: ${track.id}");
-
-          final Map<String, dynamic>? screenUser = users.firstWhere(
-            (user) => user['socketId'] == socketId,
-            orElse: () {
-              print(
-                  "🚨 No matching user found for screen share with socketId: $socketId");
-              return {};
-            },
-          );
-
-          if (screenUser!.isEmpty) {
-            print("🚨 No valid user found for screen share.");
-            return; 
-          }
-
-          print("🟢 User found for screen share: ${screenUser['username']}");
-
-          MediaStream screenShareStream =
-              await createLocalMediaStream('screenShareStream');
-          await screenShareStream.addTrack(track);
-
-          print("🔍 Adding track to screenShareRenderer...");
-
-          RTCVideoRenderer screenRenderer = screenUser['screenShareRenderer'];
-
-          if (screenRenderer.textureId == null) {
-            await screenRenderer.initialize();
-          }
-
-          screenUser['screenShareRenderer'].srcObject = screenShareStream;
-          screenUser['hasScreenSharingOn'] = true;
-
-          print(
-              "✅ Screen sharing successfully bound for ${screenUser['username']}");
-          Refresh('Screen sharing updated');
-        }
-      }
-
-      socket.emit('consumer-resume', {
-        'serverConsumerId': paramater['serverConsumerId'],
-      });
-      print("Track added to remote stream in callback consumer");
-    }
-  }
-
   Future<void> signalNewConsumerTransport(
       String remoteProducerId, String socketId) async {
     print("signalNewConsumerTransport: $remoteProducerId, $socketId");
@@ -601,8 +470,6 @@ class MediasoupService {
       try {
         consumerTransport = device.createRecvTransportFromMap(
           params,
-          consumerCallback: (Consumer consumer, [dynamic accept]) =>
-              _consumerCallback(consumer, accept, socketId),
         );
         print("cusmerTransport ${consumerTransport.id}");
       } catch (error) {
@@ -662,28 +529,7 @@ class MediasoupService {
         print("Consumer Params: $params");
         print("Response id check ${params['id']}");
 
-        consumerTransport.consume(
-            id: params['id'],
-            producerId: params['producerId'],
-            kind: RTCRtpMediaTypeExtension.fromString(params['kind']),
-            rtpParameters: RtpParameters.fromMap(params['rtpParameters']),
-            peerId: socketId,
-            accept: (param) {
-              print("check the params ${params}");
-              print("checking the Source from Params ${params['Source']}");
 
-              var param = {
-                'consumerTransport': consumerTransport,
-                'serverConsumerTransportId': params['id'],
-                'producerId': remoteProducerId,
-                'kind': params['kind'],
-                'Source': params['Source'],
-                'serverConsumerId': params['serverConsumerId']
-              };
-              print("checking the parm that will return ${param}");
-
-              return param;
-            });
       });
     } catch (error) {
       print("Error in connectRecvTransport: $error");
