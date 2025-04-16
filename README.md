@@ -44,7 +44,7 @@ The system is divided into three major components:
 
 Click the image below to watch a full demo of MediaStream in action:
 
-<a data-start="223" data-end="337" rel="noopener" target="_new" class="" href=""><img src="https://drive.google.com/uc?export=view&id=1LPXoIVpbXUVRUV5JH-P4mQjmGc7tOrNd" alt="Watch the Demo" style="max-width:100%;width:110vh;">
+<a data-start="223" data-end="337" rel="noopener" target="_new" class="" href=""><img src="https://drive.google.com/uc?export=view&id=1LPXoIVpbXUVRUV5JH-P4mQjmGc7tOrNd" alt="Watch the Demo" style="max-width:100%;width:50vh;">
 </a>
 
 ---
